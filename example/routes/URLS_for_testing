@@ -1,0 +1,9 @@
+localhost:8080/children
+localhost:8080/children/checkinout
+localhost:8080/staff
+localhost:8080/staff/createReports
+localhost:8080/staff/viewEvent
+localhost:8080/staff/createEvent
+localhost:8080/staff/scheduleEvent
+localhost:8080/staff/createAccount
+localhost:8080/staff/manageAccount

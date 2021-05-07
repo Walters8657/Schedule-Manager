@@ -1,0 +1,26 @@
+//Primary Colors
+$grey: #6A535B;
+$red: #C40F39;
+
+//Secondary Colors
+$blue: #1E438C;
+$green: #A0B13E;
+$purple: #6754A3;
+$orange: #FF5917;
+
+$lightGrey: #D5D5D5;
+
+.redBG {
+    background-color: $red;
+}
+
+.greenBG {
+    background-color: $green;
+}
+
+.blueBG {
+    background-color: $blue;
+}
+
+//Not Colors
+$borderRadius: 10px;

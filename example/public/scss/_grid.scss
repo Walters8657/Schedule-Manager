@@ -1,0 +1,24 @@
+@import 'variables';
+
+.gridContainer {
+    display: grid;
+    height: 100vh;
+    width: 100vw;
+
+    grid-template-columns: 200px repeat(11, 1fr) 20px;
+    grid-template-rows: repeat(12, 1fr);
+    gap: 20px;
+}
+
+.navSideBar {
+    grid-row: 1/-1;
+
+    background-color: $lightGrey;
+}
+
+.fullScreen {
+    grid-column: 2/-2;
+    grid-row: 2/-2;
+
+    overflow-y: scroll;
+}

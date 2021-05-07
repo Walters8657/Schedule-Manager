@@ -1,0 +1,104 @@
+<%- include ('./../../partials/staffHeader') %>  
+
+<div id="reports" class="fullScreen">
+    <h2>Reports</h2>
+    <hr>
+    <div>
+        <canvas id="arrivalTrends"></canvas>
+    </div>
+    <div>
+        <canvas id="departureTrends"></canvas>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.0.2/chart.min.js" integrity="sha512-dnUg2JxjlVoXHVdSMWDYm2Y5xcIrJg1N+juOuRi0yLVkku/g26rwHwysJDAMwahaDfRpr1AxFz43ktuMPr/l1A==" crossorigin="anonymous"></script>
+<script>
+
+    let arrivalChartElement = document.getElementById('arrivalTrends').getContext('2d');
+    let departureChartElement = document.getElementById('departureTrends').getContext('2d');
+
+    let bgColors = ['#A0B13E', '#1E438C', '#C40F39'];
+/*
+    options =   {
+                    plugins: {
+                        legend: {
+                            position: 'left'
+                        },
+                        title: {
+                            display: true,
+                            text: 'Chicken Tendies',
+                            padding: 0
+                        }
+                    },
+                    responsive: false,
+                    maintainAspectRatio: false,
+                    radius: '100%',
+                    cutout: '50%',
+                }
+*/
+    let arrivalChart = new Chart(arrivalChartElement, {
+        type: 'pie',
+        data: {
+            labels: ['On Time', '0 - 5 Minutes Late', '> 5 Minutes Late'],
+            datasets: [{
+                label: 'Children',
+                data: [
+                    <%= arrival.onTime %>,
+                    <%= arrival.fiveMinutesLate %>,
+                    <%= arrival.overFiveMinutesLate %>
+                ],
+                backgroundColor: bgColors
+            }]
+        },
+        options: {
+                    plugins: {
+                        legend: {
+                            position: 'left'
+                        },
+                        title: {
+                            display: true,
+                            text: 'Arrival Tendencies',
+                            padding: 0
+                        }
+                    },
+                    responsive: false,
+                    maintainAspectRatio: false,
+                    radius: '100%',
+                    cutout: '50%',
+                }
+    });
+
+    let departureChart = new Chart(departureChartElement, {
+        type: 'pie',
+        data: {
+            labels: ['After End', '0 - 5 Minutes Early', '> 5 Minutes Early'],
+            datasets: [{
+                label: 'Children',
+                data: [
+                    <%= departure.afterEnd %>,
+                    <%= departure.fiveMinutesEarly %>,
+                    <%= departure.overFiveMinutesEarly %>
+                ],
+                backgroundColor: bgColors
+            }]
+        },
+        options: {
+                    plugins: {
+                        legend: {
+                            position: 'left'
+                        },
+                        title: {
+                            display: true,
+                            text: 'Departure Tendencies',
+                            padding: 0
+                        }
+                    },
+                    responsive: false,
+                    maintainAspectRatio: false,
+                    radius: '100%',
+                    cutout: '50%',
+                }
+    });
+</script>
+
+<%- include ('./../../partials/footer') %>  

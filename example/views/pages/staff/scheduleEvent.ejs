@@ -1,0 +1,102 @@
+<%- include ('./../../partials/staffHeader') %>
+
+<div class ="fullScreen" id="schedulingEvent">
+    <h1>Schedule Event</h1>
+    <hr>
+    <form action="/staff/scheduleEvent" onsubmit="event.preventDefault(); seeScheduleEventFormValues(<%= JSON.stringify(complete_events) %>, '#popupSchedule');"method="POST">
+        <label for="eventName">Event Name: </label>
+            <select name="eventName" id="eventName">
+                <% var eventPresets = []; %>
+                <% complete_events.forEach(one_event => { %>
+                    <% if (one_event.startTime.length <= 1) { %>
+                        <option value=<%= one_event.id %>><%= one_event.name %></option>
+                        <% eventPresets.push(one_event); %>
+                    <% } %>
+                <%})%>
+            </select>
+            <br>
+        <label for="timeStart">Event Start Time:</label><input type="datetime-local" name="timeStart" id="timeStart">
+        <br>
+        <label for="timeEnd">Event End Time:</label><input type="datetime-local" name="timeEnd" id="timeEnd">
+        <br>
+        <% if (complete_events.length > 0) { %>
+            <label for="eventLocation">Event Location: </label> <input type="text" name="eventLocation" id="eventLocation" placeholder='<%= eventPresets[0].location %>'>
+            <div id="textareaContainer">
+                <label for="eventDesc">Event Description: </label> <textarea name="eventDesc" id="eventDesc" cols="30" rows="10"><%= eventPresets[0].description %></textarea>
+            </div>
+        <% } else { %>
+            <label for="eventLocation">Event Location: </label> <input type="text" name="eventLocation" id="eventLocation" placeholder="Event Location">
+        <% } %>
+        <script type="text/javascript">
+            var sel = document.getElementById('eventName');
+            var placeholderLocation = document.getElementById('eventLocation');
+            var placeholderDescription = document.getElementById('eventDesc');
+            sel.onchange = function(){
+                var id = this.options[this.selectedIndex].value;
+                var location = "";
+                var description = "";
+                <% complete_events.forEach(one_event => { %>
+                    if (id == <%= one_event.id %>) {
+                        location = '<%= one_event.location %>';
+                        description = '<%= one_event.description %>';
+                    }
+                <% }) %>
+                placeholderLocation.placeholder = location;
+                placeholderDescription.value = description;
+            };
+        </script>
+        <br>
+        <br>
+
+        <!-- Removing this for tonight because I can't be bothered to implement the search feature. -->
+
+        <!--<label for="addChildren">Add Children: </label>
+        <label for="childName">Name: </label><input type="text" name="childName" id="childName" placeholder="Full Name">
+        <br>
+        <label for="childAge">Age: </label><input type="number" name="childAgeMin" id="childAge" min="0"> <label for="childAge"> to </label> <input type="number" name="childAge" id="childAge" min="0">
+        <br>
+        <label for="gender">Gender: </label>
+        <select name="gender" id="gender">
+            <option value="null">-</option>
+            <option value="m">Male</option>
+            <option value="f">Female</option>
+            <option value="o">Other</option>
+        </select>
+        <br>-->
+        <input type="submit" value="Schedule Event" class="greenBG">
+
+        <br>
+        <br>
+
+        <input type='text' id="childSearchBox" oninput="childrenSearch()" placeholder='Search By Name'>
+
+        <br>
+
+        <div id="selectChildScheduleEvent">
+            <% for( let i = 0; i < children.length; i++ ) { %>
+                <label for="<%= children[i].id %>">
+                    <span class="aChild">
+                        <input type="checkbox" name="childName" id="<%= children[i].id %>" value="<%= children[i].id %>">
+                        <div><%= children[i].firstName %> <br> <%= children[i].lastName %></div>
+                    </span>
+                </label>
+            <% } %>
+        </div>
+    </form>
+</div>
+
+<div id="popupSchedule" class="popup">
+    <div id="popupContent" class="popupContent">
+        <h3 id="newEventName"></h3>
+        <p>Start time: <span id="newTimeStart"></span></p>
+        <p>End time: <span id="newTimeEnd"></span></p>
+        <p>Location: <span id="newEventLocation"></span></p>
+        <p>Scheduled: <span id="selectedChildren"></span></p>
+        <div>
+            <button class="redBG" onclick="hidePopup('#popupSchedule')">Cancel</button>
+            <button class="greenBG" onclick="scheduleEvent()">Schedule Event</button>
+        </div>
+    </div>
+</div>
+
+<%- include ('./../../partials/footer') %>

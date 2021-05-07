@@ -1,0 +1,38 @@
+<%- include ('./../../partials/staffHeader') %>
+
+<div id="manageAccount" class="fullScreen">
+    <h2>Manage Accounts</h2>
+    <hr>
+
+    <input type='text' id="childSearchBox" oninput="childrenSearch()" placeholder='Search By Name'>
+    <button class='greenBG'>Search</button>
+
+    <h4>Staff</h4>
+    <hr>
+    <ul>
+        <% staff.forEach(user => { %>
+            <li>
+                <a class="aChild" onclick="selectAccountToEdit('<%= user.userName %>')">
+                    <p><%= user.fName.toLowerCase().charAt(0).toUpperCase() + user.fName.slice(1).toLowerCase() %></p>
+                    <p><%= user.lName.toLowerCase().charAt(0).toUpperCase() + user.lName.slice(1).toLowerCase() %></p>
+                </a>
+            </li>
+        <% }) %>
+    </ul>
+
+    <br>
+    <h4>Children</h4>
+    <hr>
+    <ul>
+        <% children.forEach(user => { %>
+            <li>
+                <a class="aChild" onclick="selectAccountToEdit('<%= user.userName %>')">
+                    <p><%= user.fName.toLowerCase().charAt(0).toUpperCase() + user.fName.slice(1).toLowerCase() %></p>
+                    <p><%= user.lName.toLowerCase().charAt(0).toUpperCase() + user.lName.slice(1).toLowerCase() %></p>
+                </a>
+            </li>
+        <% }) %>
+    </ul>
+
+</div>
+<%- include ('./../../partials/footer') %>

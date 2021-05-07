@@ -1,0 +1,27 @@
+<%- include ('./../../partials/staffHeader') %>
+
+<div class="fullScreen" id="thisIsTheLogPage">
+    <h2>Log for <%= fName.toLowerCase().charAt(0).toUpperCase() + fName.slice(1).toLowerCase() %> <%= lName.toLowerCase().charAt(0).toUpperCase() + lName.slice(1).toLowerCase()%> (<%= session.childUserName %>)</h2>
+    <hr>
+    <% if (logs.length > 0) { %>
+        <% for( let i = logs.length-1; i >= 0; i-- ) { %>
+            <% if (logs[i].event) { %>
+                <div class="timecard">
+                    <h4><%= logs[i].event %> </h4>
+                    <p>Time clocked in: <%= new Date(parseInt(logs[i].timeIn)).toLocaleString('en-US') %></p>
+                    <% if (parseInt(logs[i].timeOut) > 0) { %>
+                        <p>Time clocked out: <%= new Date(parseInt(logs[i].timeOut)).toLocaleString('en-US') %></p>
+                    <% } else { %>
+                        <p>Time clocked out: Not clocked out!</p>
+                    <% } %>
+                    <button class="editEvent" onclick="selectTimecardToEdit('<%= logs[i].timecardId %>')">Edit Timecard</button>
+                </div>
+            <% } %>
+        <% } %>
+    <% } else { %>
+        <p>No logs to display...</p>
+    <% } %>
+
+</div>
+
+<%- include ('./../../partials/footer') %>

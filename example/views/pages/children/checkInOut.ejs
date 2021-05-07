@@ -1,0 +1,229 @@
+<%- include ('./../../partials/childrenHeader') %>  
+
+<div class='fullScreen' id="clockInOut">
+    <div id='pastEvent'>
+        <% if (pastEvent == null) { %>
+            <h2>Previous Event</h2>
+            <hr>
+            <p>No past event</p>
+        <% } else { %>
+            <h2>Previous Event</h2>
+            <% var startTime = new Date(pastEvent.startTime); %>
+            <% var endTime = new Date(pastEvent.endTime); %>
+            <% var formattedStartTime = startTime.toLocaleString('en-US'); %>
+            <% var formattedEndTime = endTime.toLocaleString('en-US'); %>
+            <% if (startTime.getDate() == endTime.getDate()
+                    && startTime.getMonth() == endTime.getMonth()
+                    && startTime.getFullYear() == endTime.getFullYear()) { %>
+                <% var spaceIndex = formattedEndTime.indexOf(' '); %>
+                <p><span><%= formattedStartTime %></span> - <span><%= formattedEndTime.substring(spaceIndex) %> </span></p>
+            <% } else { %>
+                <p><%= formattedStartTime + ' -'%></p>
+                <p><%= formattedEndTime %></p>
+            <% } %>
+            
+            <hr>
+            <h4><%= pastEvent.name %></h4>
+            <p><%= pastEvent.location %></p>
+            <p><%= pastEvent.description %></p>
+        <% } %>
+        <a href="/children">
+            <button>
+                View Calendar
+            </button>
+        </a>
+        <% try { %>
+            <% var timecardsForEvent = JSON.parse(timecardDataAccessor.getTimecardsForEvent(pastEvent.id)).data;
+            var eventUserTimecard = null;
+            timecardsForEvent.forEach(timecard => {
+                if (timecard.userName == session.username.toLowerCase()) {
+                    eventUserTimecard = timecard;
+                }
+            }); %>
+
+            <% if (eventUserTimecard != null && eventUserTimecard.timeOut < 0) { %>
+                <button class="redBG" onclick="showPopup('#popupCheckOutPrevious')">
+                    Check Out
+                </button>
+            <% } else if (eventUserTimecard != null) { %>
+                <hr>
+                <p>You attended this event from:</p>
+                <p><%= new Date(parseInt(eventUserTimecard.timeIn)).toLocaleString('en-US') + ' -' %></p>
+                <p><%= new Date(parseInt(eventUserTimecard.timeOut)).toLocaleString('en-US') %></p>
+            <% } %>
+        <% } catch (e) {} %>
+    </div>
+    <div id='currentEvent'>
+        <% if (currentEvent == null) { %>
+            <h2>Next Event</h2>
+            <hr>
+            <p>No current event</p>
+        <% } else { %>
+            <h2>Next Event</h2>
+            <% var startTime = new Date(currentEvent.startTime); %>
+            <% var endTime = new Date(currentEvent.endTime); %>
+            <% var formattedStartTime = startTime.toLocaleString('en-US'); %>
+            <% var formattedEndTime = endTime.toLocaleString('en-US'); %>
+            <% if (startTime.getDate() == endTime.getDate()
+                    && startTime.getMonth() == endTime.getMonth()
+                    && startTime.getFullYear() == endTime.getFullYear()) { %>
+                <% var spaceIndex = formattedEndTime.indexOf(' '); %>
+                <p><span><%= formattedStartTime %></span> - <span><%= formattedEndTime.substring(spaceIndex) %> </span></p>
+            <% } else { %>
+                <p><%= formattedStartTime + ' -'%></p>
+                <p><%= formattedEndTime %></p>
+            <% } %>
+            <hr>
+            <h4><%= currentEvent.name %></h4>
+            <p><%= currentEvent.location %></p>
+            <p><%= currentEvent.description %></p>
+            <% try { %>
+                <% var timecardsForEvent = JSON.parse(timecardDataAccessor.getTimecardsForEvent(currentEvent.id)).data;
+                var eventUserTimecard = null;
+                timecardsForEvent.forEach(timecard => {
+                    if (timecard.userName == session.username.toLowerCase()) {
+                        eventUserTimecard = timecard;
+                    }
+                });
+
+                if (eventUserTimecard != null && eventUserTimecard.timeOut == "-1") { %>
+                    <button class="redBG" onclick="showPopup('#popupCheckOutCurrent')">
+                        Check Out
+                    </button>
+                <% } else if (eventUserTimecard != null) { %>
+                    <hr>
+                    <p>You attended this event from:</p>
+                    <p><%= new Date(parseInt(eventUserTimecard.timeIn)).toLocaleString('en-US') + ' -' %></p>
+                    <p><%= new Date(parseInt(eventUserTimecard.timeOut)).toLocaleString('en-US') %></p>
+                <% } else { %>
+                    <% if (Date.parse(currentEvent.startTime) - Date.now() < 900000) { %>
+                        <button class="greenBG" onclick="showPopup('#popupCurrent'); console.log('hjere');">
+                            Check In
+                        </button>
+                    <% } %>
+                <% } %> 
+            <% } catch (e) { %>
+                <% if (Date.parse(currentEvent.startTime) - Date.now() < 900000) { %>
+                    <button class="greenBG" onclick="showPopup('#popupCurrent'); console.log('hje2re');">
+                        Check In
+                    </button>
+                <% } %>
+            <% } %>
+        <% } %>
+    </div>
+    <div id='upcommingEvent'>
+        <% if (nextEvent == null) { %>
+            <h2>Upcoming Event</h2>
+            <hr>
+            <p>No upcoming event</p>
+        <% } else { %>
+            <h2>Upcoming Event</h2>
+            <% var startTime = new Date(nextEvent.startTime); %>
+            <% var endTime = new Date(nextEvent.endTime); %>
+            <% var formattedStartTime = startTime.toLocaleString('en-US'); %>
+            <% var formattedEndTime = endTime.toLocaleString('en-US'); %>
+            <% if (startTime.getDate() == endTime.getDate()
+                    && startTime.getMonth() == endTime.getMonth()
+                    && startTime.getFullYear() == endTime.getFullYear()) { %>
+                <% var spaceIndex = formattedEndTime.indexOf(' '); %>
+                <p><span><%= formattedStartTime %></span> - <span><%= formattedEndTime.substring(spaceIndex) %> </span></p>
+            <% } else { %>
+                <p><%= formattedStartTime + ' -'%></p>
+                <p><%= formattedEndTime %></p>
+            <% } %>
+            <hr>
+            <h4><%= nextEvent.name %></h4>
+            <p><%= nextEvent.location %></p>
+            <p><%= nextEvent.description %></p>
+            <% try { %>
+                <% var timecardsForEvent = JSON.parse(timecardDataAccessor.getTimecardsForEvent(nextEvent.id)).data;
+                var eventUserTimecard = null;
+                timecardsForEvent.forEach(timecard => {
+                    if (timecard.userName == session.username.toLowerCase()) {
+                        eventUserTimecard = timecard;
+                    }
+                });
+
+                if (eventUserTimecard != null && eventUserTimecard.timeOut == "-1") { %>
+                    <button class="redBG" onclick="showPopup('#popupCheckOut')">
+                        Check Out
+                    </button>
+                <% } else if (eventUserTimecard != null) { %>
+                    <hr>
+                    <p>You attended this event from:</p>
+                    <p><%= new Date(parseInt(eventUserTimecard.timeIn)).toLocaleString('en-US') + ' -' %></p>
+                <p><%= new Date(parseInt(eventUserTimecard.timeOut)).toLocaleString('en-US') %></p>
+                <% } else { %>
+                    <% if (Date.parse(nextEvent.startTime) - Date.now() < 900000) { %>
+                        <button class="greenBG" onclick="showPopup('#popup')">
+                            Check In
+                        </button>
+                    <% } %> 
+                <% } %> 
+            <% } catch (e) { %>
+                <% if (Date.parse(nextEvent.startTime) - Date.now() < 900000) { %>
+                    <button class="greenBG" onclick="showPopup('#popup')">
+                        Check In
+                    </button>
+                <% } %>
+            <% } %>
+        <% } %>
+    </div>
+</div>
+
+<div id="popup" class="popup">
+    <div id="popupContent" class="popupContent">
+        <h3>Would You Like To Check Into This Event?</h3>
+        <p>Checking into this event will check you out of any events that have not already checked out of.</p>
+        <div>
+            <button class="redBG" onclick="hidePopup('#popup')">Cancel</button>
+            <button class="greenBG" onclick="clockIn('<%= session.username %>', '<%= nextEvent != null ? nextEvent.id : '-1' %>', Date.now())">Check In</button>
+        </div>
+    </div>
+</div>
+
+<div id="popupCurrent" class="popup">
+    <div id="popupContent" class="popupContent">
+        <h3>Would You Like To Check Into This Event?</h3>
+        <p>Checking into this event will check you out of any events that have not already checked out of.</p>
+        <div>
+            <button class="redBG" onclick="hidePopup('#popupCurrent')">Cancel</button>
+            <button class="greenBG" onclick="clockIn('<%= session.username %>', '<%= currentEvent != null ? currentEvent.id : '-1' %>', Date.now())">Check In</button>
+        </div>
+    </div>
+</div>
+
+<div id="popupCheckOut" class="popup">
+    <div id="popupContent" class="popupContent">
+        <h3>Are you sure youd like to check out of this event?</h3>
+        <p>There will be no way to check back in to an event if you check out.</p>
+        <div>
+            <button class="redBG" onclick="hidePopup('#popupCheckOut')">Remain In Event</button>
+            <button class="greenBG" onclick="clockOut('<%= session.username %>', '<%= nextEvent != null ? nextEvent.id : '-1' %>', Date.now())">Check Out</button>
+        </div>
+    </div>
+</div>
+
+<div id="popupCheckOutCurrent" class="popup">
+    <div id="popupContent" class="popupContent">
+        <h3>Are you sure youd like to check out of this event?</h3>
+        <p>There will be no way to check back in to an event if you check out.</p>
+        <div>
+            <button class="redBG" onclick="hidePopup('#popupCheckOutCurrent')">Remain In Event</button>
+            <button class="greenBG" onclick="clockOut('<%= session.username %>', '<%= currentEvent != null ? currentEvent.id : '-1' %>', Date.now())">Check Out</button>
+        </div>
+    </div>
+</div>
+
+<div id="popupCheckOutPrevious" class="popup">
+    <div id="popupContent" class="popupContent">
+        <h3>Are you sure youd like to check out of this event?</h3>
+        <p>There will be no way to check back in to an event if you check out.</p>
+        <div>
+            <button class="redBG" onclick="hidePopup('#popupCheckOutPrevious')">Remain In Event</button>
+            <button class="greenBG" onclick="clockOut('<%= session.username %>', '<%= pastEvent != null ? pastEvent.id : '-1' %>', Date.now())">Check Out</button>
+        </div>
+    </div>
+</div>
+
+<%- include ('./../../partials/footer') %>  

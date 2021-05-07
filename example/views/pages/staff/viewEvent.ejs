@@ -1,0 +1,49 @@
+<%- include ('./../../partials/staffHeader') %>
+
+<div class="fullScreen" id="eventList">
+    <h1>View Event Presets</h1>
+    <hr>
+    <input type='text' id="eventSearchBox" oninput="eventSearch()" placeholder='Search By Name'>
+    <button class='greenBG'>Search</button>
+    <%
+        message = [];
+        events.forEach(event => {
+            if (event.startTime.length < 1) {
+                message.push(
+                    {
+                        id: event.id,
+                        name: event.name,
+                        location: event.location,
+                        description: event.description
+                    }
+                );
+            }
+        });
+    %>
+
+    <% for( let i = 0; i < message.length; i++ ) { %>
+        <div class="anEvent">
+            <h4><span id="eventName"><%= message[i].name %></span> <span><%= message[i].location %> </span></h4>
+            <p><%= message[i].description %> </p>
+            <button class="editEvent" onclick="selectEventPresetToEdit('<%= message[i].id %>')">Edit Event</button>
+            <% console.log(message[i].name); %>
+            <button class="deleteEvent" onclick="selectEventToDelete('#popupDeleteEvent', '<%= message[i].id %>')">Delete Event</button>
+        </div>
+    <% } %>
+    <p hidden id="eventIDToDelete"></p>
+
+</div>
+
+<div id="popupDeleteEvent" class="popup">
+    <div id="popupContent" class="popupContent">
+        <h5 id="eventNameToDelete"></h5>
+        <p> Are you sure you wish to delete this event? </p>
+        <br>
+        <div>
+            <button class="greenBG" onclick="hidePopup('#popupDeleteEvent')">Cancel</button>
+            <button class="redBG" onclick="editTheEventPreset('delete')">Delete Event</button>
+        </div>
+    </div>
+</div>
+
+<%- include ('./../../partials/footer') %>

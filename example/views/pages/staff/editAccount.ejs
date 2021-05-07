@@ -1,0 +1,105 @@
+<%- include ('./../../partials/staffHeader') %>
+
+<div id="editAccount" class="fullScreen">
+    <h2>Editing the user: <%=session.originalUsername%></h2>
+    <hr>
+
+    <form action="/staff/editAccount" onsubmit="event.preventDefault(); seeEditAccountFormValues('#popup');"method="POST">
+        <label for="fname">First Name: </label> <input type="text" name="fname" id="fname" value="<%=session.originalUserData.fName%>" required>
+        <br>
+        <label for="lname">Last Name: </label> <input type="text" name="lname" id="lname" value="<%=session.originalUserData.lName%>" required>
+        <br>
+        <label for="birthDate">Birthdate: </label> <input type="date" name="birthDate" id="birthDate" value="<%=session.originalUserData.birthday%>" required>
+        <br>
+        <label for="permissions">Permissions: </label>
+            <select name="permissions" id="permissions">
+                <% //I hate this but couldn't find an easier way Sadge %>
+                <% if (session.originalUserData.permission == "child") { %>
+                    <option selected value="child">Child</option>
+                <% } else if (session.originalUserData.permission == "lowStaff") { %>
+                    <option selected value="lowStaff">Lower Staff</option>
+                    <option value="upStaff">Upper Staff</option>
+                    <option value="sysOverseer">System Overseer</option>
+                <% } else if (session.originalUserData.permission == "upStaff") { %>
+                    <option value="lowStaff">Lower Staff</option>
+                    <option selected value="upStaff">Upper Staff</option>
+                    <option value="sysOverseer">System Overseer</option>
+                <% } else if (session.originalUserData.permission == "sysOverseer") { %>
+                    <option selected value="sysOverseer">System Overseer</option>
+                <% } else {%>
+                    <option value="child">Child</option>
+                    <option value="lowStaff">Lower Staff</option>
+                    <option value="upStaff">Upper Staff</option>
+                    <option value="sysOverseer">System Overseer</option>
+                <% } %>
+            </select>
+        <br>
+        <label for="gender">Gender: </label>
+            <select name="gender" id="gender">
+                <% //I hate this but couldn't find an easier way Sadge %>
+                <% if (session.originalUserData.gender == "male") { %>
+                    <option value="other">Other</option>
+                    <option selected value="male">Male</option>
+                    <option value="female">Female</option>
+                <% } else if (session.originalUserData.gender == "female") { %>
+                    <option value="other">Other</option>
+                    <option value="male">Male</option>
+                    <option selected value="female">Female</option>
+                <% } else if (session.originalUserData.gender == "other") { %>
+                    <option selected value="other">Other</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                <% } else {%>
+                    <option value="other">Other</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                <% } %>
+            </select>
+        <br><br>
+
+        <h6>Leave Username and/or password blank to auto generate</h6>
+        <br>
+        <label for="username">Username: </label> <input type="text" name="username" id="username" value="<%=session.originalUserData.userName%>" disabled>
+        <label for="password">New Password: </label> <input type="password" name="password" id="password" placeholder="Password">
+
+        <span id="useOldPW">
+          <label for="oldpw" class="useOldPW">Use Old Password</label> <input type="checkbox" name="oldpw" id="oldpw">
+        </span>
+
+        <input type="submit" value="Update Account" class="greenBG">
+    </form>
+
+    <form action="/staff/editAccount" onsubmit="event.preventDefault(); seeDeleteAccountFormValues('#popupDeleteAccount', <%= overseerCount %>, '<%= session.originalUserData.permission %>');"method="POST">
+        <input type="hidden" id="operation" name="operation" value="delete">
+        <input type="submit" value="Delete Account" class="redBG">
+    </form>
+
+</div>
+
+<div id="popup" class="popup">
+    <div id="popupContent" class="popupContent">
+        <h3 id="newUserName"></h3>
+        <h5 id="newUserPermissions"></h5>
+        <p>Birthday: <span id="newUserBirthday"></span></p>
+        <p>Username: <span id="newUserUsername"></span></p>
+        <p>Password: <span id="newUserPassword"></span></p>
+        <div>
+            <button class="redBG" onclick="hidePopup('#popup')">Cancel</button>
+            <button class="greenBG" onclick="editAccount('update')">Update Account</button>
+        </div>
+    </div>
+</div>
+
+<div id="popupDeleteAccount" class="popup">
+    <div id="popupContent" class="popupContent">
+        <p> Are you sure you wish to delete this account? </p>
+        <br>
+        <div>
+            <button class="greenBG" onclick="hidePopup('#popupDeleteAccount')">Cancel</button>
+            <button class="redBG" onclick="editAccount('delete')">Delete Account</button>
+        </div>
+    </div>
+</div>
+
+
+<%- include ('./../../partials/footer') %>

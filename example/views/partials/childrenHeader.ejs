@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Childrens Attention Home</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="../css/reset.css">
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/calendarMain.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="../js/main.js"></script>
+    <script src="../js/calendarMain.js"></script>
+</head>
+
+<body class="gridContainer">
+
+    <header class="navSideBar">
+        <img src="./../images/CAH_Logo.png" alt="Children's Attention Home Logo">
+
+        <h2 id="childFirstName"><%= session.userFName %></h2>
+        <h2 id="childLastName"><%= session.userLName %> </h2>
+
+        <nav>
+            <ul>
+                <li>
+                    <a href="/children"><p>View Schedule</p></a>
+                </li>
+                <li>
+                    <a href="/children/checkInOut"><p>Check In / Out</p></a>
+                </li>
+                <li>
+                    <a href="/logout"><p>Log Out</p></a>
+                </li>
+            </ul>
+        </nav>
+
+        <a class="userManual" href="https://drive.google.com/drive/folders/1HU2qLgTaOfO5E8TP8RiCPBd93-A7n17i?usp=sharing" target="_blank"><p>User Manual</p></a>
+
+    </header>

@@ -1,0 +1,38 @@
+<%- include ('./../../partials/staffHeader') %>
+<% userPopups = [] %>
+<div class='fullScreen' id='childSearch'>
+    <h1>Search for Children</h1>
+    <hr>
+    <input type='text' id="childSearchBox" oninput="childrenSearch()" placeholder='Search By Name'>
+    <button class='greenBG'>Search</button>
+    <ul>
+        <% children.forEach(child => { //Load in children (first name, last name, username%>
+            <li>
+                <a class="aChild" onclick="showPopup('#<%= child.userName %>')">
+                    <p><%= child.fName.toLowerCase().charAt(0).toUpperCase() + child.fName.slice(1).toLowerCase() %></p>
+                    <p><%= child.lName.toLowerCase().charAt(0).toUpperCase() + child.lName.slice(1).toLowerCase() %></p>
+                </a>
+            </li>
+
+            <% html = /*God I hate everything right now*/
+                '<div id="' + child.userName + '" class="popup">'+
+                    '<div id="popupContent" class="popupContent">'+
+                        '<h3 class="childNamePopup">' + child.fName.toLowerCase().charAt(0).toUpperCase() + child.fName.slice(1).toLowerCase()  + '<br>' + child.lName.toLowerCase().charAt(0).toUpperCase() + child.lName.slice(1).toLowerCase() + '</h3>'+
+                        '<button onclick="visitChildsCalendar(\'' + child.userName + '\')" class="greenBGstaffHome">View Schedule</button>'+
+                        '<button onclick="viewChildLog(\'' + child.userName + '\')" class="blueBGstaffHome">View Logs</button>'+
+                        '<button class="redBGstaffHome" onclick="hidePopup(\'#' + child.userName + '\')">Close</button>'+
+                    '</div>'+
+                '</div>'
+            /*As god is my witness I will murder you if you change this code*/
+            %>
+
+            <% userPopups.push(html) //Adds the html element for a users popup to an array %>
+        <% }); %>
+    </ul>
+</div>
+
+<% userPopups.forEach(user => { //Outputs said array into the page %>
+    <%- user %>
+<% }) %>
+
+<%- include ('./../../partials/footer') %>

@@ -1,0 +1,137 @@
+<%- include ('./../../partials/childrenHeader') %>  
+
+<script>
+    let events = [];
+
+    '<% events.forEach(event => { %>'
+        title = <%- JSON.stringify(event.title).replace('\&#34', '\"').replace('\&#39', '\'') %>;
+        start = <%- JSON.stringify(event.start).replace('\&#34', '\"').replace('\&#39', '\'') %>;
+        end = <%- JSON.stringify(event.end).replace('\&#34', '\"').replace('\&#39', '\'') %>;
+        desc = <%- JSON.stringify(event.desc).replace('\&#34', '\"').replace('\&#39', '\'') %>;
+        eventLocation = <%- JSON.stringify(event.location).replace('\&#34', '\"').replace('\&#39', '\'') %>;
+        eventId = <%- JSON.stringify(event.id).replace('\&#34', '\"').replace('\&#39', '\'') %>;
+
+        events.push({ //Adds calendar event to the array of events
+            title: title,
+            start: start,
+            end: end,
+            desc: desc,
+            location: eventLocation,
+            id: eventId,
+            color: getColor(<%-JSON.stringify(timecards)%>, eventId, start)
+        })
+    '<% }); %>'
+
+    document.addEventListener('DOMContentLoaded', function() {
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+        headerToolbar: {
+            left: 'prev,next',
+            center: 'title',
+            right: 'dayGridMonth,timeGridWeek,timeGridDay'
+        },
+        dayMaxEventRows: true,
+        navLinks: true,
+        fixedWeekCount: false,
+        eventLimit:true,
+        events: events,
+        eventClick: function(info) {
+            event_timecard = null;
+
+            <% timecards.forEach(timecard => { %>
+                if (info.event.id == <%= timecard.eventId %>) {
+                    event_timecard = <%- JSON.stringify(timecard) %>;
+                }
+            <% }) %>
+
+            console.log(event_timecard);
+            if (event_timecard == null) {
+                if (new Date(info.event.start).getTime() - new Date().getTime() > 900000) { // Popup no clocking
+                    console.log('popup default');
+                    seeCalendarEventValues('#popupCalendarDefault', info.event.title, info.event.extendedProps.desc, info.event.start, info.event.end, info.event.extendedProps.location, info.event.id, "Default");
+                } else { // Popup clock in
+                    console.log('popup clock in');
+                    seeCalendarEventValues('#popupCalendarClockIn', info.event.title, info.event.extendedProps.desc, info.event.start, info.event.end, info.event.extendedProps.location, info.event.id, "ClockIn");
+                }
+            } else {
+                if (parseInt(event_timecard.timeOut) <= 0) { // Popup clock out
+                    console.log('popup clock out');
+                    seeCalendarEventValues('#popupCalendarClockOut', info.event.title, info.event.extendedProps.desc, info.event.start, info.event.end, info.event.extendedProps.location, info.event.id, "ClockOut");
+                } else { // Popup show time attended
+                    console.log('popup show time');
+                    var timeIn = new Date(parseInt(event_timecard.timeIn)).toLocaleString('en-US');
+                    var timeOut = new Date(parseInt(event_timecard.timeOut)).toLocaleString('en-US');
+                    seeCalendarEventValues('#popupCalendarDisplayTimeAttended', info.event.title, info.event.extendedProps.desc, info.event.start, info.event.end, info.event.extendedProps.location, info.event.id, "ShowTime", timeIn, timeOut);
+                }
+            }
+        },
+        themeSystem: 'Cerulean',
+        });
+        calendar.render();
+    });
+</script>
+
+<div class="fullScreen" id="calendar"></div>
+
+<div id="popupCalendarDefault" class="popup">
+    <div class="popupContent">
+        <h3 id="eventNameDefault"></h3>
+        <p><span id="eventDescDefault"></span></p>
+        <p>Location: <span id="eventLocationDefault"></span></p>
+        <p>Start time: <span id="eventStartTimeDefault"></span></p>
+        <p>End time: <span id="eventEndTimeDefault"></span></p>
+        <var id="calEventIdDefault" style="display: none;"></var>
+        <div>
+            <button class="redBG" onclick="hidePopup('#popupCalendarDefault')">Close</button>
+        </div>
+    </div>
+</div>
+
+<div id="popupCalendarClockIn" class="popup">
+    <div class="popupContent">
+        <h3 id="eventNameClockIn"></h3>
+        <p><span id="eventDescClockIn"></span></p>
+        <p>Location: <span id="eventLocationClockIn"></span></p>
+        <p>Start time: <span id="eventStartTimeClockIn"></span></p>
+        <p>End time: <span id="eventEndTimeClockIn"></span></p>
+        <var id="calEventIdClockIn" style="display: none;"></var>
+        <div>
+            <button class="redBG" onclick="hidePopup('#popupCalendarClockIn')">Close</button>
+            <button class="greenBG" onclick="clockIn('<%=session.username%>', $('#calEventIdClockIn').html(), new Date().getTime().toString(), 'children')">Clock in</button>
+        </div>
+    </div>
+</div>
+
+<div id="popupCalendarClockOut" class="popup">
+    <div class="popupContent">
+        <h3 id="eventNameClockOut"></h3>
+        <p><span id="eventDescClockOut"></span></p>
+        <p>Location: <span id="eventLocationClockOut"></span></p>
+        <p>Start time: <span id="eventStartTimeClockOut"></span></p>
+        <p>End time: <span id="eventEndTimeClockOut"></span></p>
+        <var id="calEventIdClockOut" style="display: none;"></var>
+        <div>
+            <button class="redBG" onclick="hidePopup('#popupCalendarClockOut')">Close</button>
+            <button class="redBG" onclick="clockOut('<%=session.username%>', $('#calEventIdClockOut').html(), new Date().getTime().toString(), 'children')">Clock out</button>
+        </div>
+    </div>
+</div>
+
+<div id="popupCalendarDisplayTimeAttended" class="popup">
+    <div class="popupContent">
+        <h3 id="eventNameShowTime"></h3>
+        <p><span id="eventDescShowTime"></span></p>
+        <p>Location: <span id="eventLocationShowTime"></span></p>
+        <p>Start time: <span id="eventStartTimeShowTime"></span></p>
+        <p>End time: <span id="eventEndTimeShowTime"></span></p>
+        <var id="calEventIdShowTime" style="display: none;"></var>
+        <br>
+        <p>Clocked in: <span id="timeInShowTime"></span></p>
+        <p>Clocked out: <span id="timeOutShowTime"></span></p>
+        <div>
+            <button class="redBG" onclick="hidePopup('#popupCalendarDisplayTimeAttended')">Close</button>
+        </div>
+    </div>
+</div>
+
+<%- include ('./../../partials/footer') %>  

@@ -1,0 +1,65 @@
+<%- include ('./../../partials/staffHeader') %>
+
+
+<div class="fullScreen" id="schedulingEvent">
+    <form action="/staff/scheduleEvent" onsubmit="event.preventDefault(); seeScheduledEventFormValues('#popupEvent');" method="POST">
+        <h1>Edit Scheduled Event</h1>
+        <hr>
+        <form action="/">
+            <label for="eventName">Event Name: </label> <input type="text" name="eventName" id="eventName" value= "<%= session.eventDataToEdit.name %>">
+            <br>
+            <label for="timeStart">Event Start Time:</label><input type="datetime-local" name="timeStart" id="timeStart" value="<%= session.eventDataToEdit.startTime.replace(" ", "T") %>">
+            <br>
+            <label for="timeEnd">Event End Time:</label><input type="datetime-local" name="timeEnd" id="timeEnd" value="<%= session.eventDataToEdit.endTime.replace(" ", "T") %>">
+            <br>
+            <label for="eventLocation">Event Location: </label> <input type="text" name="eventLocation" id="eventLocation" value= "<%= session.eventDataToEdit.location %>">
+            <br>
+            <div id="textareaContainer">
+                <label for="eventDesc">Event Description: </label> <textarea name="eventDesc" id="eventDesc" cols="30" rows="10"><%= session.eventDataToEdit.description %></textarea>
+            </div>
+
+            <br>
+            <br>
+            <input type="submit" value="Edit Event" class="greenBG">
+            <br>
+            <br>
+            <input type='text' id="childSearchBox" oninput="childrenSearch()" placeholder='Search By Name'>
+
+            <br>
+
+            <var id="tickedChildren" style="display: none;"><%= JSON.stringify(childrenTicked) %></var>
+            <div id="selectChildScheduleEvent">
+                <% for( let i = 0; i < children.length; i++ ) { %>
+                    <label for="<%= children[i].userName %>">
+                        <span class="aChild">
+                            <% if (childrenTicked[children[i].userName]) { %>
+                                <input type="checkbox" name="childName" id="<%= children[i].userName %>" value="<%= children[i].userName %>" checked>
+                            <% } else { %>
+                                <input type="checkbox" name="childName" id="<%= children[i].userName %>" value="<%= children[i].userName %>">
+                            <% } %>
+                            <div><%= children[i].fName %> <br> <%= children[i].lName %></div>
+                        </span>
+                    </label>
+                <% } %>
+            </div>
+        </form>
+    </form>
+</div>
+
+<div id="popupEvent" class="popup">
+    <div id="popupContent" class="popupContent">
+        <h3 id="newEventName"></h3>
+        <p>Location: <span id="newEventLocation"></span></p>
+        <p>Description: <span id="newEventDesc"></span></p>
+        <p>Start Time: <span id="newTimeStart"></span></p>
+        <p>End Time: <span id="newTimeEnd"></span></p>
+        <p>Scheduled: <span id="selectedChildren"></span></p>
+        <var id="originalTickedChildren" style="display: none;"></var>
+        <div>
+            <button class="redBG" onclick="hidePopup('#popupEvent')">Cancel</button>
+            <button class="greenBG" onclick="editTheScheduledEvent('update')">Edit Event</button>
+        </div>
+    </div>
+</div>
+
+<%- include ('./../../partials/footer') %>

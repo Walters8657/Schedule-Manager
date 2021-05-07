@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Childrens Attention Home</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="../css/reset.css">
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/calendarMain.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="../js/moment.js"></script>
+    <script src="../js/main.js"></script>
+    <script src="../js/calendarMain.js"></script>
+</head>
+
+<body class="gridContainer">
+
+    <header class="navSideBar">
+        <img src="./../images/CAH_Logo.png" alt="Children's Attention Home Logo">
+
+        <h2 id="childFirstName"><%= session.userFName %></h2>
+        <h2 id="childLastName"><%= session.userLName %> </h2>
+
+        <nav>
+            <ul>
+                <% if (session.userPermission == "lowStaff") { %>
+                    <li>
+                        <a href="/staff"><p>Search Children</p></a>
+                    </li>
+                    <li>
+                        <a href="/staff/viewAllCalendar"><p>View Calendar</p></a>
+                    </li>
+                    <li>
+                        <a href="/staff/createReports"><p>Create Reports</p></a>
+                    </li>
+                    <li>
+                        <a href="/staff/viewSchedule"><p>View Events</p></a>
+                    </li>
+                <% } %>
+                <% if ((session.userPermission == "upStaff") || (session.userPermission == "sysOverseer")) { %>
+                    <li>
+                        <a href="/staff"><p>Search Children</p></a>
+                    </li>
+                    <li>
+                        <a href="/staff/viewAllCalendar"><p>View Calendar</p></a>
+                    </li>
+                    <li>
+                        <a href="/staff/createReports"><p>Create Reports</p></a>
+                    </li>
+                    <li>
+                        <a href="/staff/createEvent"><p>Create Event Preset</p></a>
+                    </li>
+                    <li>
+                        <a href="/staff/viewEvent"><p>View Event Presets</p></a>
+                    </li>
+                    <li>
+                        <a href="/staff/scheduleEvent"><p>Schedule Events</p></a>
+                    </li>
+                    <li>
+                        <a href="/staff/viewSchedule"><p>View Event List</p></a>
+                    </li>
+                <% } %>
+                <% if (session.userPermission == "sysOverseer") { %>
+                    <li>
+                        <a href="/staff/createAccount"><p>Create Account</p></a>
+                    </li>
+                    <li>
+                        <a href="/staff/manageAccount"><p>Manage Accounts</p></a>
+                    </li>
+                <% } %>
+                <li>
+                    <a href="/logout"><p>Log Out</p></a>
+                </li>
+            </ul>
+        </nav>
+
+
+        <% if (session.userPermission == "lowStaff") { %>
+            <a class="userManual" href="https://drive.google.com/drive/folders/1I1fWvha3AChgcoHVax9byu6iX0FDerQv?usp=sharing" target="_blank"><p>User Manual</p></a>
+        <% } %>
+        <% if (session.userPermission == "upStaff") { %>
+            <a class="userManual" href="https://drive.google.com/drive/folders/1TjrrkVs6kMnLb1s4N7W7Efxb-mTqTCks?usp=sharing" target="_blank"><p>User Manual</p></a>
+        <% } %>
+        <% if (session.userPermission == "sysOverseer") { %>
+            <a class="userManual" href="https://drive.google.com/drive/folders/1qGGV8haKQmNHjUjnLrk_2DjfHUih5s9G?usp=sharing" target="_blank"><p>User Manual</p></a>
+        <% } %>
+
+    </header>

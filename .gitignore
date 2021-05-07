@@ -1,0 +1,8 @@
+/node_modules
+/example/node_modules
+/midend/node_modules
+/api/api/__pycache__
+*.bak
+*.dat
+*.dir
+/api/api_test/__pycache__/

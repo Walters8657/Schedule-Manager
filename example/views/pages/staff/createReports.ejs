@@ -1,0 +1,54 @@
+<%- include ('./../../partials/staffHeader') %>  
+
+<div id="createReport" class="fullScreen">
+    <h2>Create A Report</h2>
+    <hr>
+
+    <h4>Leaving a selection blank will forgoe any filtering for said section</h4>
+
+    <form onsubmit="event.preventDefault(); createReport();">
+        <h4>Select Children</h4>
+        <hr>
+        <label for="name">Name: </label> <input type="text" name="name" id="name" placeholder="Full Name">
+        <br>
+        <label for="age">Age: </label> <input type="number" name="ageMin" id="ageMin" min="0" placeholder="-"> <label for=""> - </label> <input type="number" name="ageMax" id="ageMax" min="0" placeholder="-">
+        <br>
+        <label for="gender">Gender: </label> 
+            <select name="gender" id="gender">
+                <option value="allGenders">-</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                <option value="other">Other</option>
+            </select>
+    
+        <h4>Select Events</h4>
+        <hr>
+        <label for="eventName">Event Name: </label>
+            <select name="eventName" id="eventName">
+                <option value="allEventTypes">-</option>
+                <option value="event1">Event 1</option>
+                <option value="event2">Event 2</option>
+                <option value="event3">Event One More Than 2</option>
+            </select>
+        <br>
+        <!--
+        <label for="eventType">Event Type: </label>
+            <select name="eventType" id="eventType">
+                <option value="allEventTypes">-</option>
+                <option value="type1">Type 1</option>
+                <option value="type2">Type 2</option>
+                <option value="type3">Hey Look, A Third Type</option>
+            </select>
+        -->
+    
+        <h4>Select Time</h4>
+        <hr>
+        <label for="startDate">Start Date: </label> <input type="datetime-local" name="startDate" id="startDate">
+        <br>
+        <label for="endDate">End Date: </label> <input type="datetime-local" name="endDate" id="endDate">
+
+        <input type="submit" value="Create Report" class="greenBG">
+    </form>
+</div>
+
+<%- include ('./../../partials/footer') %>  

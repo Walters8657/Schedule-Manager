@@ -1,0 +1,25 @@
+{
+  "name": "midend",
+  "version": "1.0.0",
+  "description": "Mid-end package for CAHSM",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Crane1195/CAHScheduleManager.git"
+  },
+  "author": "CAHSM Team",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Crane1195/CAHScheduleManager/issues"
+  },
+  "homepage": "https://github.com/Crane1195/CAHScheduleManager#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "fetch": "^1.1.0",
+    "node-fetch": "^2.6.1",
+    "xmlhttprequest": "^1.8.0"
+  }
+}
